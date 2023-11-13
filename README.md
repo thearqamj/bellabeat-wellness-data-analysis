@@ -1,7 +1,7 @@
 # Bellabeat Wellness Data Analysis with R
 Bellabeat, a high-tech manufacturer of health-focused products for women. Bellabeat is a successful small company, but they have the potential to become a larger player in the global smart device market.
 
-<span style="color: #ff0000;">This is some red text.</span>
+<span style="color: red;">This is some red text.</span>
 
 ### Step 01: ASK
 We want to analyze smart device usage data in order to gain insight into how consumers use non-Bellabeat smart devices. We will select one Bellabeat product to apply these insights to in your presentation.
