@@ -57,3 +57,11 @@ Due to the small size of sample I sorted and filtered tables creating Pivot Tabl
 | minuteStepsWide_merged       | Microsoft Excel CSV   | Steps tracked every minute over 31 days of 33 users (Every minute in single column)                    |
 | sleepDay_merged              | Microsoft Excel CSV   | Daily sleep logs, tracked by: Total count of sleeps a day, Total minutes, Total Time in Bed             |
 | weightLogInfo_merged         | Microsoft Excel CSV   | Weight track by day in Kg and Pounds over 30 days. Calculation of BMI. 5 users report weight manually, 3 users not. In total, there are 8 users |
+
+
+**Data Credibility and Integrity:**
+Due to the limitation of size (30 users) and not having any demographic information we could encounter a sampling bias. We are not sure if the sample is representative of the population as a whole. Another problem we would encounter is that the dataset is not current and also the time limitation of the survey (2 months long). That is why we will give our case study an operational approach.
+
+
+### Step 03: PROCESS
+I will focus my analysis in R due to the accessibility, amount of data and to be able to create data visualization to share my results with stakeholders.
