@@ -1,7 +1,6 @@
 # Bellabeat Wellness Data Analysis with R
 Bellabeat, a high-tech manufacturer of health-focused products for women. Bellabeat is a successful small company, but they have the potential to become a larger player in the global smart device market.
 
-<span style="color: red;">This is some red text.</span>
 
 ### Step 01: ASK
 We want to analyze smart device usage data in order to gain insight into how consumers use non-Bellabeat smart devices. We will select one Bellabeat product to apply these insights to in your presentation.
@@ -10,6 +9,11 @@ Question of the client:
 1. What are some trends in smart device usage?
 2. How could these trends apply to Bellabeat customers?
 3. How could these trends help influence Bellabeat marketing strategy?
+
+**Stakeholders**
+Urška Sršen - Bellabeat cofounder and Chief Creative Officer
+Sando Mur - Bellabeat cofounder and key member of Bellabeat executive team
+Bellabeat Marketing Analytics team
 
 #### Deliverables:
 1. A clear summary of the business task
@@ -28,4 +32,28 @@ Question of the client:
 ### Step 02: PREPARE
 The data has been downloaded from Kaggle and stored in a new and separate folder so that it is easily accessible.
 
+**Data Organization and verification:**
+Available to us are 18 CSV documents. Each document represents different quantitative data tracked by Fitbit. The data is considered long since each row is one time point per subject, so each subject will have data in multiple rows.Every user has a unique ID and different rows since data is tracked by day and time.
 
+Due to the small size of sample I sorted and filtered tables creating Pivot Tables in Excel. I was able to verify attributes and observations of each table and relations between tables. Counted sample size (users) of each table and verified time length of analysis - 31 days.
+
+| Table Name                  | Type                   | Description                                                                                             |
+|-----------------------------|------------------------|---------------------------------------------------------------------------------------------------------|
+| dailyActivity_merged        | Microsoft Excel CSV   | Daily Activity over 31 days of 33 users. Tracking daily: Steps, Distance, Intensities, Calories          |
+| dailyCalories_merged        | Microsoft Excel CSV   | Daily Calories over 31 days of 33 users                                                                |
+| dailyIntensities_merged     | Microsoft Excel CSV   | Daily Intensity over 31 days of 33 users. Measured in Minutes and Distance, dividing groups in 4 categories: Sedentary, Lightly Active, Fairly Active, Very Active |
+| dailySteps_merged            | Microsoft Excel CSV   | Daily Steps over 31 days of 33 users                                                                   |
+| heartrate_seconds_merged     | Microsoft Excel CSV   | Exact day and time heartrate logs for just 7 users                                                     |
+| hourlyCalories_merged        | Microsoft Excel CSV   | Hourly Calories burned over 31 days of 33 users                                                        |
+| hourlyIntensities_merged     | Microsoft Excel CSV   | Hourly total and average intensity over 31 days of 33 users                                           |
+| hourlySteps_merged           | Microsoft Excel CSV   | Hourly Steps over 31 days of 33 users                                                                  |
+| minuteCaloriesNarrow_merged  | Microsoft Excel CSV   | Calories burned every minute over 31 days of 33 users (Every minute in single row)                    |
+| minuteCaloriesWide_merged    | Microsoft Excel CSV   | Calories burned every minute over 31 days of 33 users (Every minute in single column)                 |
+| minuteIntensitiesNarrow_merged| Microsoft Excel CSV   | Intensity counted by minute over 31 days of 33 users (Every minute in single row)                     |
+| minuteIntensitiesWide_merged  | Microsoft Excel CSV   | Intensity counted by minute over 31 days of 33 users (Every minute in single column)                  |
+| minuteMETsNarrow_merged      | Microsoft Excel CSV   | Ratio of the energy you are using in a physical activity compared to the energy you would use at rest. Counted in minutes |
+| minuteSleep_merged           | Microsoft Excel CSV   | Log Sleep by Minute for 24 users over 31 days. Value column not specified                                |
+| minuteStepsNarrow_merged     | Microsoft Excel CSV   | Steps tracked every minute over 31 days of 33 users (Every minute in single row)                       |
+| minuteStepsWide_merged       | Microsoft Excel CSV   | Steps tracked every minute over 31 days of 33 users (Every minute in single column)                    |
+| sleepDay_merged              | Microsoft Excel CSV   | Daily sleep logs, tracked by: Total count of sleeps a day, Total minutes, Total Time in Bed             |
+| weightLogInfo_merged         | Microsoft Excel CSV   | Weight track by day in Kg and Pounds over 30 days. Calculation of BMI. 5 users report weight manually, 3 users not. In total, there are 8 users |
