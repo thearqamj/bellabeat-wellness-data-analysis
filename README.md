@@ -65,3 +65,21 @@ Due to the limitation of size (30 users) and not having any demographic informat
 
 ### Step 03: PROCESS
 I will focus my analysis in R due to the accessibility, amount of data and to be able to create data visualization to share my results with stakeholders.
+
+We will choose the packages that will help us on our analysis and open them. We will use the following packages for our analysis:
+
+tidyverse
+here
+skimr
+janitor
+lubridate
+ggpubr
+ggrepel
+
+'library(ggpubr)
+library(tidyverse)
+library(here)
+library(skimr)
+library(janitor)
+library(lubridate)
+library(ggrepel)`
