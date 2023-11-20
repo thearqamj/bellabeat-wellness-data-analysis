@@ -156,3 +156,39 @@ hourly_steps <- hourly_steps %>%
 ```
 
 We will verify that duplicates have been removed
+```
+sum(duplicated(daily_sleep))
+```
+
+**Clean and rename columns**
+We want to ensure that column names are using right syntax and same format in all datasets since we will merge them later on. We are changing the format of all columns to lower case.
+
+```
+clean_names(daily_activity)
+daily_activity<- rename_with(daily_activity, tolower)
+clean_names(daily_sleep)
+daily_sleep <- rename_with(daily_sleep, tolower)
+clean_names(hourly_steps)
+hourly_steps <- rename_with(hourly_steps, tolower)
+```
+
+**Consistency of date and time columns**
+Now that we have verified our column names and change them to lower case, we will focus on cleaning date-time format for daily_activity and daily_sleep since we will merge both data frames. Since we can disregard the time on daily_sleep data frame we are using as_date instead as as_datetime
+
+```
+daily_activity <- daily_activity %>%
+  rename(date = activitydate) %>%
+  mutate(date = as_date(date, format = "%m/%d/%Y"))
+
+daily_sleep <- daily_sleep %>%
+  rename(date = sleepday) %>%
+  mutate(date = as_date(date,format ="%m/%d/%Y %I:%M:%S %p" , tz=Sys.timezone()))
+```
+
+
+We will check our cleaned datasets
+
+```
+head(daily_activity)
+head(daily_sleep)
+```
