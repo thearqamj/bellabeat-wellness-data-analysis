@@ -99,3 +99,7 @@ Due to the the small sample we won't consider for this analysis Weight (8 Users)
 `daily_activity <- read_csv(file = "D:/Desktop/Data Analysis/Data Sets and Analysis/Capstone Project/bellabeta/Fitabase Data 4.12.16-5.12.16/dailyActivity_merged.csv")`
 `daily_sleep <- read_csv(file = "D:/Desktop/Data Analysis/Data Sets and Analysis/Capstone Project/bellabeta/Fitabase Data 4.12.16-5.12.16/sleepDay_merged.csv")`
 `hourly_steps <- read_csv(file = "D:/Desktop/Data Analysis/Data Sets and Analysis/Capstone Project/bellabeta/Fitabase Data 4.12.16-5.12.16/hourlySteps_merged.csv")`
+
+
+
+We will preview our selected data frames and check the summary of each column.
