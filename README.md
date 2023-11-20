@@ -156,6 +156,7 @@ hourly_steps <- hourly_steps %>%
 ```
 
 We will verify that duplicates have been removed
+
 ```
 sum(duplicated(daily_sleep))
 ```
@@ -184,7 +185,6 @@ daily_sleep <- daily_sleep %>%
   rename(date = sleepday) %>%
   mutate(date = as_date(date,format ="%m/%d/%Y %I:%M:%S %p" , tz=Sys.timezone()))
 ```
-
 
 We will check our cleaned datasets
 
