@@ -117,4 +117,42 @@ str(hourly_steps)
 ```
 
 
+**Cleaning and formatting**
+Now that we got to know more about our data structures we will process them to look for any errors and inconsistencies.
 
+Before we continue with our cleaning we want to make sure how many unique users are per data frame. Even though 30 is the minimal sample size we will still keep the sleep dataset for practice only.
+
+```
+n_unique(daily_activity$Id)
+n_unique(daily_sleep$Id)
+n_unique(hourly_steps$Id)
+```
+
+Duplicates
+We will now look for any duplicates:
+
+```
+sum(duplicated(daily_activity))
+sum(duplicated(daily_sleep))
+sum(duplicated(hourly_steps))
+```
+
+
+Remove duplicates and N/A
+Knowing the length of our observations (daily_sleep 413) we are able to delete duplicates for daily_sleep.
+
+```
+daily_activity <- daily_activity %>%
+  distinct() %>%
+  drop_na()
+
+daily_sleep <- daily_sleep %>%
+  distinct() %>%
+  drop_na()
+
+hourly_steps <- hourly_steps %>%
+  distinct() %>%
+  drop_na()
+```
+
+We will verify that duplicates have been removed
