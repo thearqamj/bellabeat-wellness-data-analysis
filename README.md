@@ -77,13 +77,15 @@ We will choose the packages that will help us on our analysis and open them. We 
 7. ggrepel
 
 **Code**
-```library(ggpubr)
+```
+library(ggpubr)
 library(tidyverse)
 library(here)
 library(skimr)
 library(janitor)
 library(lubridate)
-library(ggrepel)```
+library(ggrepel)
+```
 
 
 **Importing datasets**
