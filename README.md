@@ -105,3 +105,16 @@ hourly_steps <- read_csv(file = "D:/Desktop/Data Analysis/Data Sets and Analysis
 
 
 We will preview our selected data frames and check the summary of each column.
+```
+head(daily_activity)
+str(daily_activity)
+
+head(daily_sleep)
+str(daily_sleep)
+
+head(hourly_steps)
+str(hourly_steps)
+```
+
+
+
