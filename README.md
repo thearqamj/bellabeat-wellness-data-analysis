@@ -30,9 +30,11 @@ Bellabeat Marketing Analytics team
 
    
 ### Step 02: PREPARE
+
 The data has been downloaded from Kaggle and stored in a new and separate folder so that it is easily accessible.
 
 **Data Organization and verification:**
+
 Available to us are 18 CSV documents. Each document represents different quantitative data tracked by Fitbit. The data is considered long since each row is one time point per subject, so each subject will have data in multiple rows.Every user has a unique ID and different rows since data is tracked by day and time.
 
 Due to the small size of sample I sorted and filtered tables creating Pivot Tables in Excel. I was able to verify attributes and observations of each table and relations between tables. Counted sample size (users) of each table and verified time length of analysis - 31 days.
@@ -60,10 +62,12 @@ Due to the small size of sample I sorted and filtered tables creating Pivot Tabl
 
 
 **Data Credibility and Integrity:**
+
 Due to the limitation of size (30 users) and not having any demographic information we could encounter a sampling bias. We are not sure if the sample is representative of the population as a whole. Another problem we would encounter is that the dataset is not current and also the time limitation of the survey (2 months long). That is why we will give our case study an operational approach.
 
 
 ### Step 03: PROCESS
+
 I will focus my analysis in R due to the accessibility, amount of data and to be able to create data visualization to share my results with stakeholders.
 
 We will choose the packages that will help us on our analysis and open them. We will use the following packages for our analysis:
@@ -77,6 +81,7 @@ We will choose the packages that will help us on our analysis and open them. We 
 7. ggrepel
 
 **Code**
+
 ```
 library(ggpubr)
 library(tidyverse)
@@ -89,6 +94,7 @@ library(ggrepel)
 
 
 **Importing datasets**
+
 Knowing the datasets we have, we will upload the datasets that will help us answer our business task. On our analysis we will focus on the following datasets:
 
 Daily_activity
@@ -97,6 +103,7 @@ Hourly_steps
 Due to the the small sample we won't consider for this analysis Weight (8 Users) and heart rate (7 users)
 
 **Code**
+
 ```
 daily_activity <- read_csv(file = "D:/Desktop/Data Analysis/Data Sets and Analysis/Capstone Project/bellabeta/Fitabase Data 4.12.16-5.12.16/dailyActivity_merged.csv")
 daily_sleep <- read_csv(file = "D:/Desktop/Data Analysis/Data Sets and Analysis/Capstone Project/bellabeta/Fitabase Data 4.12.16-5.12.16/sleepDay_merged.csv")
@@ -118,6 +125,7 @@ str(hourly_steps)
 
 
 **Cleaning and formatting**
+
 Now that we got to know more about our data structures we will process them to look for any errors and inconsistencies.
 
 Before we continue with our cleaning we want to make sure how many unique users are per data frame. Even though 30 is the minimal sample size we will still keep the sleep dataset for practice only.
@@ -128,7 +136,8 @@ n_unique(daily_sleep$Id)
 n_unique(hourly_steps$Id)
 ```
 
-Duplicates
+**Duplicates**
+
 We will now look for any duplicates:
 
 ```
@@ -138,7 +147,8 @@ sum(duplicated(hourly_steps))
 ```
 
 
-Remove duplicates and N/A
+**Remove duplicates and N/A**
+
 Knowing the length of our observations (daily_sleep 413) we are able to delete duplicates for daily_sleep.
 
 ```
@@ -162,6 +172,7 @@ sum(duplicated(daily_sleep))
 ```
 
 **Clean and rename columns**
+
 We want to ensure that column names are using right syntax and same format in all datasets since we will merge them later on. We are changing the format of all columns to lower case.
 
 ```
@@ -174,6 +185,7 @@ hourly_steps <- rename_with(hourly_steps, tolower)
 ```
 
 **Consistency of date and time columns**
+
 Now that we have verified our column names and change them to lower case, we will focus on cleaning date-time format for daily_activity and daily_sleep since we will merge both data frames. Since we can disregard the time on daily_sleep data frame we are using as_date instead as as_datetime
 
 ```
