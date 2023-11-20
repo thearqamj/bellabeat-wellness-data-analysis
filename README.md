@@ -204,3 +204,22 @@ We will check our cleaned datasets
 head(daily_activity)
 head(daily_sleep)
 ```
+
+For our hourly_steps dataset we will convert date string to date-time.
+
+```
+hourly_steps<- hourly_steps %>% 
+  rename(date_time = activityhour) %>% 
+  mutate(date_time = as.POSIXct(date_time,format ="%m/%d/%Y %I:%M:%S %p" , tz=Sys.timezone()))
+
+head(hourly_steps)
+```
+
+**Merging Datasets**
+
+We will merge daily_activity and daily_sleep to see any correlation between variables by using id and date as their primary keys.
+
+```
+daily_activity_sleep <- merge(daily_activity, daily_sleep, by=c ("id", "date"))
+glimpse(daily_activity_sleep)
+```
