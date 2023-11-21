@@ -223,3 +223,70 @@ We will merge daily_activity and daily_sleep to see any correlation between vari
 daily_activity_sleep <- merge(daily_activity, daily_sleep, by=c ("id", "date"))
 glimpse(daily_activity_sleep)
 ```
+
+### Step 04: PROCESS
+
+We will analyze trends of the users of FitBit and determine if that can help us on BellaBeat's marketing strategy.
+
+**5.1 Type of users per activity level**
+
+since we don't have any demographic variables from our sample we want to determine the type of users with the data we have. We can classify the users by activity considering the daily amount of steps. We can categorize users as follows:
+
+Sedentary - Less than 5000 steps a day.
+Lightly active - Between 5000 and 7499 steps a day.
+Fairly active - Between 7500 and 9999 steps a day.
+Very active - More than 10000 steps a day.
+Classification has been made per the following article https://www.10000steps.org.au/articles/counting-steps/
+
+First we will calculate the daily steps average by user.
+
+```
+daily_average <- daily_activity_sleep %>%
+  group_by(id) %>%
+  summarise (mean_daily_steps = mean(totalsteps), mean_daily_calories = mean(calories), mean_daily_sleep = mean(totalminutesasleep))
+
+head(daily_average)
+```
+
+We will now classify our users by the daily average steps.
+
+```
+user_type <- daily_average %>%
+  mutate(user_type = case_when(
+    mean_daily_steps < 5000 ~ "sedentary",
+    mean_daily_steps >= 5000 & mean_daily_steps < 7499 ~ "lightly active", 
+    mean_daily_steps >= 7500 & mean_daily_steps < 9999 ~ "fairly active", 
+    mean_daily_steps >= 10000 ~ "very active"
+  ))
+
+head(user_type)
+```
+
+
+Now that we have a new column with the user type we will create a data frame with the percentage of each user type to better visualize them on a graph.
+
+Below we can see that users are fairly distributed by their activity considering the daily amount of steps. We can determine that based on users activity all kind of users wear smart-devices.
+
+![image](https://github.com/thearqamj/bellabeat-wellness-data-analysis/assets/135017364/278e2b51-dbed-4ec2-9303-ed22ba8ed7b7)
+
+```
+user_type_percent %>%
+  ggplot(aes(x="",y=total_percent, fill=user_type)) +
+  geom_bar(stat = "identity", width = 1)+
+  coord_polar("y", start=0)+
+  theme_minimal()+
+  theme(axis.title.x= element_blank(),
+        axis.title.y = element_blank(),
+        panel.border = element_blank(), 
+        panel.grid = element_blank(), 
+        axis.ticks = element_blank(),
+        axis.text.x = element_blank(),
+        plot.title = element_text(hjust = 0.5, size=14, face = "bold")) +
+  scale_fill_manual(values = c("#85e085","#e6e600", "#ffd480", "#ff8080")) +
+  geom_text(aes(label = labels),
+            position = position_stack(vjust = 0.5))+
+  labs(title="User type distribution")
+```
+
+![image](https://github.com/thearqamj/bellabeat-wellness-data-analysis/assets/135017364/8b560144-4d85-403d-b721-1928da4e4a21)
+
