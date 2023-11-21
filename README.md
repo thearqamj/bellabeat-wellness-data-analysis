@@ -469,3 +469,23 @@ Being more precise we want to see how many minutes do users wear their device pe
 daily_use_merged <- merge(daily_activity, daily_use, by=c ("id"))
 head(daily_use_merged)
 ```
+
+
+We need to create a new data frame calculating the total amount of minutes users wore the device every day and creating three different categories:
+
+All day - device was worn all day.
+More than half day - device was worn more than half of the day.
+Less than half day - device was worn less than half of the day.
+
+```
+minutes_worn <- daily_use_merged %>% 
+  mutate(total_minutes_worn = veryactiveminutes+fairlyactiveminutes+lightlyactiveminutes+sedentaryminutes)%>%
+  mutate (percent_minutes_worn = (total_minutes_worn/1440)*100) %>%
+  mutate (worn = case_when(
+    percent_minutes_worn == 100 ~ "All day",
+    percent_minutes_worn < 100 & percent_minutes_worn >= 50~ "More than half day", 
+    percent_minutes_worn < 50 & percent_minutes_worn > 0 ~ "Less than half day"
+  ))
+
+head(minutes_worn)
+```
