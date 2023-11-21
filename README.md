@@ -1,4 +1,5 @@
-![image](https://github.com/thearqamj/bellabeat-wellness-data-analysis/assets/135017364/1b16fa4c-d202-4c8c-848c-cbcdd5db93de)# Bellabeat Wellness Data Analysis with R
+# Bellabeat Wellness Data Analysis with R
+
 Bellabeat, a high-tech manufacturer of health-focused products for women. Bellabeat is a successful small company, but they have the potential to become a larger player in the global smart device market.
 
 
