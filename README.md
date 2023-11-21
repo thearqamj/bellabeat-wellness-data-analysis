@@ -1,4 +1,4 @@
-# Bellabeat Wellness Data Analysis with R
+![image](https://github.com/thearqamj/bellabeat-wellness-data-analysis/assets/135017364/1b16fa4c-d202-4c8c-848c-cbcdd5db93de)# Bellabeat Wellness Data Analysis with R
 Bellabeat, a high-tech manufacturer of health-focused products for women. Bellabeat is a successful small company, but they have the potential to become a larger player in the global smart device market.
 
 
@@ -290,3 +290,181 @@ user_type_percent %>%
 
 ![image](https://github.com/thearqamj/bellabeat-wellness-data-analysis/assets/135017364/8b560144-4d85-403d-b721-1928da4e4a21)
 
+
+**5.2 Steps and minutes asleep per weekday**
+
+We want to know now what days of the week are the users more active and also what days of the week users sleep more. We will also verify if the users walk the recommended amount of steps and have the recommended amount of sleep.
+
+Below we are calculating the weekdays based on our column date. We are also calculating the average steps walked and minutes sleeped by weekday.
+
+```
+weekday_steps_sleep <- daily_activity_sleep %>%
+  mutate(weekday = weekdays(date))
+
+weekday_steps_sleep$weekday <-ordered(weekday_steps_sleep$weekday, levels=c("Monday", "Tuesday", "Wednesday", "Thursday",
+"Friday", "Saturday", "Sunday"))
+
+ weekday_steps_sleep <-weekday_steps_sleep%>%
+  group_by(weekday) %>%
+  summarize (daily_steps = mean(totalsteps), daily_sleep = mean(totalminutesasleep))
+
+head(weekday_steps_sleep)
+```
+
+
+```
+ggarrange(
+    ggplot(weekday_steps_sleep) +
+      geom_col(aes(weekday, daily_steps), fill = "#006699") +
+      geom_hline(yintercept = 7500) +
+      labs(title = "Daily steps per weekday", x= "", y = "") +
+      theme(axis.text.x = element_text(angle = 45,vjust = 0.5, hjust = 1)),
+    ggplot(weekday_steps_sleep, aes(weekday, daily_sleep)) +
+      geom_col(fill = "#85e0e0") +
+      geom_hline(yintercept = 480) +
+      labs(title = "Minutes asleep per weekday", x= "", y = "") +
+      theme(axis.text.x = element_text(angle = 45,vjust = 0.5, hjust = 1))
+  )
+```
+
+
+In the graphs above we can determine the following:
+
+Users walk daily the recommended amount of steps of 7500 besides Sunday's.
+Users don't sleep the recommended amount of minutes/ hours - 8 hours.
+
+
+![image](https://github.com/thearqamj/bellabeat-wellness-data-analysis/assets/135017364/d6ad8aa2-ed18-4cca-b4fa-5888d6ddbfa5)
+
+
+**5.3 Hourly steps throughout the day**
+
+Getting deeper into our analysis we want to know when exactly are users more active in a day.
+
+We will use the hourly_steps data frame and separate date_time column.
+
+
+```
+hourly_steps %>%
+  group_by(time) %>%
+  summarize(average_steps = mean(steptotal)) %>%
+  ggplot() +
+  geom_col(mapping = aes(x=time, y = average_steps, fill = average_steps)) + 
+  labs(title = "Hourly steps throughout the day", x="", y="") + 
+  scale_fill_gradient(low = "green", high = "red")+
+  theme(axis.text.x = element_text(angle = 90))
+```
+![image](https://github.com/thearqamj/bellabeat-wellness-data-analysis/assets/135017364/b07dcea4-e961-4288-9ef8-fc3f1a8c3ead)
+
+
+We can see that users are more active between 8am and 7pm. Walking more steps during lunch time from 12pm to 2pm and evenings from 5pm and 7pm.
+
+**5.4 Correlations**
+
+We will now determine if there is any correlation between different variables:
+
+```
+Daily steps and daily sleep
+Daily steps and calories
+ggarrange(
+ggplot(daily_activity_sleep, aes(x=totalsteps, y=totalminutesasleep))+
+  geom_jitter() +
+  geom_smooth(color = "red") + 
+  labs(title = "Daily steps vs Minutes asleep", x = "Daily steps", y= "Minutes asleep") +
+   theme(panel.background = element_blank(),
+        plot.title = element_text( size=14)), 
+ggplot(daily_activity_sleep, aes(x=totalsteps, y=calories))+
+  geom_jitter() +
+  geom_smooth(color = "red") + 
+  labs(title = "Daily steps vs Calories", x = "Daily steps", y= "Calories") +
+   theme(panel.background = element_blank(),
+        plot.title = element_text( size=14))
+)
+`geom_smooth()` using method = 'loess' and formula 'y ~ x'
+
+`geom_smooth()` using method = 'loess' and formula 'y ~ x'
+```
+![image](https://github.com/thearqamj/bellabeat-wellness-data-analysis/assets/135017364/6079e6b5-aa5e-41f9-b1eb-1f933e4b6584)
+
+**Per our plots:**
+
+There is no correlation between daily activity level based on steps and the amount of minutes users sleep a day.
+
+Otherwise we can see a positive correlation between steps and calories burned. As assumed the more steps walked the more calories may be burned.
+
+**5.5 Use of smart device**
+
+**5.5.1 Days used smart device**
+
+Now that we have seen some trends in activity, sleep and calories burned, we want to see how often do the users in our sample use their device. That way we can plan our marketing strategy and see what features would benefit the use of smart devices.
+
+We will calculate the number of users that use their smart device on a daily basis, classifying our sample into three categories knowing that the date interval is 31 days:
+
+high use - users who use their device between 21 and 31 days.
+moderate use - users who use their device between 10 and 20 days.
+low use - users who use their device between 1 and 10 days.
+First we will create a new data frame grouping by Id, calculating number of days used and creating a new column with the classification explained above.
+
+```
+daily_use <- daily_activity_sleep %>%
+  group_by(id) %>%
+  summarize(days_used=sum(n())) %>%
+  mutate(usage = case_when(
+    days_used >= 1 & days_used <= 10 ~ "low use",
+    days_used >= 11 & days_used <= 20 ~ "moderate use", 
+    days_used >= 21 & days_used <= 31 ~ "high use", 
+  ))
+  
+head(daily_use)
+```
+
+We will now create a percentage data frame to better visualize the results in the graph. We are also ordering our usage levels.
+```
+daily_use_percent <- daily_use %>%
+  group_by(usage) %>%
+  summarise(total = n()) %>%
+  mutate(totals = sum(total)) %>%
+  group_by(usage) %>%
+  summarise(total_percent = total / totals) %>%
+  mutate(labels = scales::percent(total_percent))
+
+daily_use_percent$usage <- factor(daily_use_percent$usage, levels = c("high use", "moderate use", "low use"))
+
+head(daily_use_percent)
+```
+Now that we have our new table we can create our plot:
+
+```
+daily_use_percent %>%
+  ggplot(aes(x="",y=total_percent, fill=usage)) +
+  geom_bar(stat = "identity", width = 1)+
+  coord_polar("y", start=0)+
+  theme_minimal()+
+  theme(axis.title.x= element_blank(),
+        axis.title.y = element_blank(),
+        panel.border = element_blank(), 
+        panel.grid = element_blank(), 
+        axis.ticks = element_blank(),
+        axis.text.x = element_blank(),
+        plot.title = element_text(hjust = 0.5, size=14, face = "bold")) +
+  geom_text(aes(label = labels),
+            position = position_stack(vjust = 0.5))+
+  scale_fill_manual(values = c("#006633","#00e673","#80ffbf"),
+                    labels = c("High use - 21 to 31 days",
+                                 "Moderate use - 11 to 20 days",
+                                 "Low use - 1 to 10 days"))+
+  labs(title="Daily use of smart device")
+```
+
+Analyzing our results we can see that
+
+50% of the users of our sample use their device frequently - between 21 to 31 days.
+12% use their device 11 to 20 days.
+38% of our sample use really rarely their device.
+5.5.2 Time used smart device 
+Being more precise we want to see how many minutes do users wear their device per day. For that we will merge the created daily_use data frame and daily_activity to be able to filter results by daily use of device as well.
+
+```
+daily_use_merged <- merge(daily_activity, daily_use, by=c ("id"))
+head(daily_use_merged)
+```
