@@ -459,10 +459,12 @@ daily_use_percent %>%
 
 Analyzing our results we can see that
 
-50% of the users of our sample use their device frequently - between 21 to 31 days.
-12% use their device 11 to 20 days.
-38% of our sample use really rarely their device.
-5.5.2 Time used smart device 
+-50% of the users of our sample use their device frequently - between 21 to 31 days.
+-12% use their device 11 to 20 days.
+-38% of our sample use really rarely their device.
+
+**Time used smart device **
+
 Being more precise we want to see how many minutes do users wear their device per day. For that we will merge the created daily_use data frame and daily_activity to be able to filter results by daily use of device as well.
 
 ```
@@ -489,3 +491,175 @@ minutes_worn <- daily_use_merged %>%
 
 head(minutes_worn)
 ```
+
+As we have done before, to better visualize our results we will create new data frames. In this case we will create four different data frames to arrange them later on on a same visualization.
+
+First data frame will show the total of users and will calculate percentage of minutes worn the device taking into consideration the three categories created.
+
+The three other data frames are filtered by category of daily users so that we can see also the difference of daily use and time use.
+
+```
+minutes_worn_percent<- minutes_worn%>%
+  group_by(worn) %>%
+  summarise(total = n()) %>%
+  mutate(totals = sum(total)) %>%
+  group_by(worn) %>%
+  summarise(total_percent = total / totals) %>%
+  mutate(labels = scales::percent(total_percent))
+
+
+minutes_worn_highuse <- minutes_worn%>%
+  filter (usage == "high use")%>%
+  group_by(worn) %>%
+  summarise(total = n()) %>%
+  mutate(totals = sum(total)) %>%
+  group_by(worn) %>%
+  summarise(total_percent = total / totals) %>%
+  mutate(labels = scales::percent(total_percent))
+
+minutes_worn_moduse <- minutes_worn%>%
+  filter(usage == "moderate use") %>%
+  group_by(worn) %>%
+  summarise(total = n()) %>%
+  mutate(totals = sum(total)) %>%
+  group_by(worn) %>%
+  summarise(total_percent = total / totals) %>%
+  mutate(labels = scales::percent(total_percent))
+
+minutes_worn_lowuse <- minutes_worn%>%
+  filter (usage == "low use") %>%
+  group_by(worn) %>%
+  summarise(total = n()) %>%
+  mutate(totals = sum(total)) %>%
+  group_by(worn) %>%
+  summarise(total_percent = total / totals) %>%
+  mutate(labels = scales::percent(total_percent))
+
+minutes_worn_highuse$worn <- factor(minutes_worn_highuse$worn, levels = c("All day", "More than half day", "Less than half day"))
+minutes_worn_percent$worn <- factor(minutes_worn_percent$worn, levels = c("All day", "More than half day", "Less than half day"))
+minutes_worn_moduse$worn <- factor(minutes_worn_moduse$worn, levels = c("All day", "More than half day", "Less than half day"))
+minutes_worn_lowuse$worn <- factor(minutes_worn_lowuse$worn, levels = c("All day", "More than half day", "Less than half day"))
+
+head(minutes_worn_percent)
+head(minutes_worn_highuse)
+head(minutes_worn_moduse)
+head(minutes_worn_lowuse)
+```
+
+
+Now that we have created the four data frames and also ordered worn level categories, we can visualize our results in the following plots. All the plots have been arranged together for a better visualization.
+
+```
+ggarrange(
+  ggplot(minutes_worn_percent, aes(x="",y=total_percent, fill=worn)) +
+  geom_bar(stat = "identity", width = 1)+
+  coord_polar("y", start=0)+
+  theme_minimal()+
+  theme(axis.title.x= element_blank(),
+        axis.title.y = element_blank(),
+        panel.border = element_blank(), 
+        panel.grid = element_blank(), 
+        axis.ticks = element_blank(),
+        axis.text.x = element_blank(),
+        plot.title = element_text(hjust = 0.5, size=14, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5)) +
+    scale_fill_manual(values = c("#004d99", "#3399ff", "#cce6ff"))+
+  geom_text(aes(label = labels),
+            position = position_stack(vjust = 0.5), size = 3.5)+
+  labs(title="Time worn per day", subtitle = "Total Users"),
+  ggarrange(
+  ggplot(minutes_worn_highuse, aes(x="",y=total_percent, fill=worn)) +
+  geom_bar(stat = "identity", width = 1)+
+  coord_polar("y", start=0)+
+  theme_minimal()+
+  theme(axis.title.x= element_blank(),
+        axis.title.y = element_blank(),
+        panel.border = element_blank(), 
+        panel.grid = element_blank(), 
+        axis.ticks = element_blank(),
+        axis.text.x = element_blank(),
+        plot.title = element_text(hjust = 0.5, size=14, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5), 
+        legend.position = "none")+
+    scale_fill_manual(values = c("#004d99", "#3399ff", "#cce6ff"))+
+  geom_text_repel(aes(label = labels),
+            position = position_stack(vjust = 0.5), size = 3)+
+  labs(title="", subtitle = "High use - Users"), 
+  ggplot(minutes_worn_moduse, aes(x="",y=total_percent, fill=worn)) +
+  geom_bar(stat = "identity", width = 1)+
+  coord_polar("y", start=0)+
+  theme_minimal()+
+  theme(axis.title.x= element_blank(),
+        axis.title.y = element_blank(),
+        panel.border = element_blank(), 
+        panel.grid = element_blank(), 
+        axis.ticks = element_blank(),
+        axis.text.x = element_blank(),
+        plot.title = element_text(hjust = 0.5, size=14, face = "bold"), 
+        plot.subtitle = element_text(hjust = 0.5),
+        legend.position = "none") +
+    scale_fill_manual(values = c("#004d99", "#3399ff", "#cce6ff"))+
+  geom_text(aes(label = labels),
+            position = position_stack(vjust = 0.5), size = 3)+
+  labs(title="", subtitle = "Moderate use - Users"), 
+  ggplot(minutes_worn_lowuse, aes(x="",y=total_percent, fill=worn)) +
+  geom_bar(stat = "identity", width = 1)+
+  coord_polar("y", start=0)+
+  theme_minimal()+
+  theme(axis.title.x= element_blank(),
+        axis.title.y = element_blank(),
+        panel.border = element_blank(), 
+        panel.grid = element_blank(), 
+        axis.ticks = element_blank(),
+        axis.text.x = element_blank(),
+        plot.title = element_text(hjust = 0.5, size=14, face = "bold"), 
+        plot.subtitle = element_text(hjust = 0.5),
+        legend.position = "none") +
+    scale_fill_manual(values = c("#004d99", "#3399ff", "#cce6ff"))+
+  geom_text(aes(label = labels),
+            position = position_stack(vjust = 0.5), size = 3)+
+  labs(title="", subtitle = "Low use - Users"), 
+  ncol = 3), 
+  nrow = 2)
+```
+
+![image](https://github.com/thearqamj/bellabeat-wellness-data-analysis/assets/135017364/098321eb-b078-4673-ba65-26e598f9d13b)
+
+
+
+Per our plots we can see that 36% of the total of users wear the device all day long, 60% more than half day long and just 4% less than half day.
+
+If we filter the total users considering the days they have used the device and also check each day how long they have worn the device, we have the following results:
+
+Just a reminder:
+
+high use - users who use their device between 21 and 31 days.
+moderate use - users who use their device between 10 and 20 days.
+low use - users who use their device between 1 and 10 days.
+High users - Just 6.8% of the users that have used their device between 21 and 31 days wear it all day. 88.9% wear the device more than half day but not all day.
+
+Moderate users are the ones who wear the device less on a daily basis.
+
+Being low users who wear more time their device the day they use it.
+
+
+### Step 06: ACT
+
+Bellabeat's mission is to empower women by providing them with the data to discover themselves.
+
+In order for us to respond to our business task and help Bellabeat on their mission, based on our results, I would advice to use own tracking data for further analysis. Datasets used have a small sample and can be biased since we didn't have any demographic details of users. Knowing that our main target are young and adult women I would encourage to continue finding trends to be able to create a marketing stragety focused on them.
+
+That being said, after our analysis we have found different trends that may help our online campaign and improve Bellabeat app:
+
+| Recommendation                               | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+|----------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1. Daily notification on steps and posts on app | We classified users into 4 categories and saw that the average of users walk more than 7,500 steps daily besides Sundays. We can encourage customers to reach at least daily recommended steps by CDC - 8,000 sending them alarms if they haven't reached the steps and creating also posts on our app explaining the benefits of reaching that goal. As CDC explains the more steps you walk the lower is the mortality rate. We also saw a positive correlation between steps and calories.                                                                                                      |
+| 3. Notification and sleep techniques           | Based on our results we can see that users sleep less than 8 hours a day. They could set up a desired time to go to sleep and receive a notification minutes before to prepare to sleep. Also offer helpful resources to help customers sleep - ex. breathing advises, podcasts with relaxing music, sleep techniques.                                                                                                                                                                                                                                                                                                                                        |
+| 2. Reward system                             | We are aware that some people don't get motivated by notifications so we could create a kind of game on our app for a limited period of time. The game would consist of reaching different levels based on the amount of steps walked every day. You need to maintain the activity level for a period of time (maybe a month) to pass to the next level. For each level, you would win a certain amount of stars that would be redeemable for merchandise or a discount on other Bellabeat products.                                                                             |
+
+On our analysis we didn't just check trends on daily users habits we also realized that just 50% of the users use their device on a daily basis and that just 36% of the users wear the device all time the day they used it. We can continue promote Bellabeat's products features:
+
+Water-resistant
+Long-lasting batteries
+Fashion/ elegant products
+You can wear the products everyday to any occasion without worrying about the battery.
